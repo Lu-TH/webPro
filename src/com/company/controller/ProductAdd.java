@@ -22,10 +22,12 @@ public class ProductAdd extends HttpServlet {
         String ptype = req.getParameter("ptype");
         try {
             managerService.addProduct(new Product(pid, pname, pprice, amount, ptype));
+            req.setAttribute("addMessage", "添加成功");
             System.out.println("ADD");
             req.getRequestDispatcher("WEB-INF/jsp/manager/ManagerIndex.jsp").forward(req, resp);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            req.setAttribute("addMessage", "已存在编号");
+            req.getRequestDispatcher("WEB-INF/jsp/manager/ManagerIndex.jsp").forward(req, resp);
         }
     }
 

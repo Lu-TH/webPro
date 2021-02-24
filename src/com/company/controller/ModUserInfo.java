@@ -26,7 +26,7 @@ public class ModUserInfo extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
-
+        User user = new User();
         try {
             List<FileItem> list = servletFileUpload.parseRequest(req);
             FileItem file0 = list.get(0);
@@ -39,23 +39,25 @@ public class ModUserInfo extends HttpServlet {
             String uname = file2.getString();
             String uphone = file3.getString();
             String uaddress = file4.getString();
+            if(file1 != null || !file1.equals("null")){
+                String newFileName = file1.getName();
+                String[] arr = newFileName.split("\\.");//.是特殊字符
+                String res = "." + arr[1];
+                String destinationPath = "C:\\img\\";
+                destinationPath = destinationPath + uid + res;//"C:\\img\\xxx.xxx"
 
-            String newFileName = file1.getName();
-            String[] arr = newFileName.split("\\.");//.是特殊字符
-            String res = "." + arr[1];
-            String destinationPath = "C:\\img\\";
-            destinationPath = destinationPath + uid + res;//"C:\\img\\xxx.xxx"
+                String logo = "/images/" + uid + res;
+                System.out.println(logo);
+                File newFile = new File(destinationPath);
+                file1.write(newFile);
+                user.setUlogo(logo);
+            }
 
-            String logo = "/images/" + uid + res;
-            System.out.println(logo);
-            File newFile = new File(destinationPath);
-            file1.write(newFile);
-            User user = new User();
             user.setUid(uid);
             user.setUphone(uphone);
             user.setUname(uname);
             user.setUaddress(uaddress);
-            user.setUlogo(logo);
+
             userService.changeInfo(user);
 
             req.setAttribute("userObj", user);

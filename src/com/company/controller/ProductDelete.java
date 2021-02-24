@@ -18,9 +18,11 @@ public class ProductDelete extends HttpServlet {
         try {
             managerService.delProduct(pid);
             System.out.println("del success");
+            req.setAttribute("delMessage","删除成功");
             req.getRequestDispatcher("WEB-INF/jsp/manager/ManagerIndex.jsp").forward(req, resp);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            req.setAttribute("delMessage","删除失败");
+            req.getRequestDispatcher("WEB-INF/jsp/manager/ManagerIndex.jsp").forward(req, resp);
         }
     }
 }
